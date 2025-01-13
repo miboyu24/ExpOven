@@ -14,19 +14,17 @@ class FeishuBackend(NotifierBackendBase):
 
     def __init__(self, cfg:Dict):
         # Validate the configuration.
-        assert 'hook' in cfg and 'access_token=<?>' not in cfg['hook'], \
+        assert 'hook' in cfg, \
             'Please ensure the validity of "feishu.hook" field in the configuration file!'
-        assert 'secure_key' in cfg and '<?>' not in cfg['secure_key'], \
-            'Please ensure the validity of "feishu.secure_key" field in the configuration file!'
 
         # Setup.
         self.cfg = cfg
         self.url = cfg['hook']
-        self.secret = cfg['secure_key']
+        self.signature = cfg['signature']
 
-    def _gen_sign(self, secret):
+    def _gen_sign(self, signature):
         timestamp = int(datetime.now().timestamp())
-        string_to_sign = '{}\n{}'.format(timestamp, secret)
+        string_to_sign = '{}\n{}'.format(timestamp, signature)
         hmac_code = hmac.new(
             string_to_sign.encode("utf-8"), digestmod=hashlib.sha256
         ).digest()
@@ -41,7 +39,7 @@ class FeishuBackend(NotifierBackendBase):
         '''
 
         # 1. Prepare data dict.
-        sign = self._gen_sign(self.secret)
+        sign = self._gen_sign(self.signature)
         timestamp = int(datetime.now().timestamp())
 
         formatted_data = {

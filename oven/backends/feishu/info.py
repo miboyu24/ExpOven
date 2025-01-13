@@ -47,17 +47,17 @@ class FeishuExpInfo(ExpInfoBase):
         # Format the information for later use.
         self.current_description = self.current_description
         if self.current_signal == Signal.S:
-            self.exp_info = f'🔥 `{self.cmd}`\n\n' + (self.current_description)
+            self.exp_info = f'🔥 {self.cmd}\n\n' + (self.current_description)
             self.exp_info_backup = self.exp_info
             self.aux_info = ''
         else:
             self.exp_info = self.exp_info_backup
 
-            cost_info = f'⏱️ **Time Cost**: {str(self.current_timestamp - self.start_timestamp)}s.'
+            cost_info = f'⏱️ Time Cost: {str(self.current_timestamp - self.start_timestamp)}s.'
             if self.current_signal == Signal.P:
-                status_info = f'🏃 **Running!**'
+                status_info = f'🏃 Running!'
             elif self.current_signal == Signal.E:
-                status_info = f'❌ **Error!**'
+                status_info = f'❌ Error!'
             elif self.current_signal == Signal.T:
                 status_info = f'🔔 Done!'
             else:
